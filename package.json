@@ -1,0 +1,63 @@
+{
+  "name": "integreat-api-json",
+  "version": "0.1.0",
+  "description": "Integreat json api",
+  "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no> (http://kjellmorten.no)",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "npm run lint && nyc --reporter=text-summary ava",
+    "dev": "ava --watch",
+    "prebuild": "npm run lint && npm run test",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "nyc:report": "nyc report",
+    "lint": "standard"
+  },
+  "ava": {
+    "files": [
+      "lib/**/*-test.js",
+      "test/**/*-test.js",
+      "test/helpers/*.js"
+    ],
+    "source": [
+      "lib/**/!(*-test).js",
+      "index.js"
+    ],
+    "babel": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "node": "8.4"
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "nyc": {
+    "exclude": [
+      "**/*-test.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/integreat-io/integreat-api-json.git"
+  },
+  "bugs": {
+    "url": "https://github.com/integreat-io/integreat-api-json/issues"
+  },
+  "homepage": "https://github.com/integreat-io/integreat-api-json#readme",
+  "engines": {
+    "node": "8.4.x",
+    "npm": ">= 5.4.2"
+  },
+  "devDependencies": {
+    "ava": "^0.24.0",
+    "babel-preset-env": "^1.6.1",
+    "nyc": "^11.3.0",
+    "standard": "^10.0.3"
+  }
+}
