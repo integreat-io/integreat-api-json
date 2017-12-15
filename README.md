@@ -29,8 +29,7 @@ const jsonapi = require('integreat-api-json')
 const greatHapi = require('integreat-hapi')
 
 const great = integreat(...)
-const apiOptions = {}
-const routes = greatHapi(jsonapi(great, apiOptions))
+const routes = greatHapi(jsonapi(great))
 
 const server = new Hapi.Server()
 // ... whatever Hapi setup you need
@@ -47,8 +46,7 @@ const jsonapi = require('integreat-api-json')
 const greatExpress = require('integreat-express')
 
 const great = integreat(...)
-const apiOptions = {}
-const routes = greatExpress(jsonapi(great, apiOptions))
+const routes = greatExpress(jsonapi(great))
 
 const app = express()
 // ... whatever Express setup you need
@@ -60,9 +58,9 @@ The general route objects looks like this:
 
 ```
 const routes = [
-  {method: 'GET', path: `/entries`, handlerFunction},
-  {method: 'GET', path: `/entries/{id}`, handlerFunction},
-  {method: 'GET', path: `/entries/{id}/{relationship}`, handlerFunction},
+  {method: 'GET', path: `/entries`, handler: (request) => { ... }},
+  {method: 'GET', path: `/entries/{id}`, handler: (request) => { ... }},
+  {method: 'GET', path: `/entries/{id}/{relationship}`, handler: (request) => { ... }},
   ...
 ]
 ```
