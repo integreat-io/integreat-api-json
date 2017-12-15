@@ -15,6 +15,11 @@ Requires Integreat v.0.5.0 or higher.
 npm install integreat-api-json
 ```
 
+`integreat-api-json` returns an array of general route objects, that may be
+given to a wrapper module for either Express (`integreat-express`) or Hapi
+(`integreat-hapi`). For other frameworks, either use the general route objects
+or [request a wrapper](https://github.com/integreat-io/integreat-api-json/issues).
+
 Example of use with Hapi:
 
 ```javascript
@@ -50,6 +55,33 @@ const app = express()
 app.use(routes)
 app.listen(3000)
 ```
+
+The general route objects looks like this:
+
+```
+const routes = [
+  {method: 'GET', path: `/entries`, handlerFunction},
+  {method: 'GET', path: `/entries/{id}`, handlerFunction},
+  {method: 'GET', path: `/entries/{id}/{relationship}`, handlerFunction},
+  ...
+]
+```
+
+Path parameters are specified with surrounding brackets.
+
+The `handlerFunction` accepts a `request` object and returns a `response`
+object. Expected `request` object from a GET request to `/entries/ent1/auth`:
+```
+{
+  method: 'GET',
+  id: 'ent1',
+  relationship: 'author',
+  path: '/entries/ent1/auth'
+}
+```
+
+A `type` property, that indicates the type of resources, is added to the
+`request` object by the router, and will in this case be `entry`.
 
 ### Running the tests
 
