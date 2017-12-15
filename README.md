@@ -7,7 +7,7 @@ A rest api for Integreat, supporting JSON and specifically
 
 ### Prerequisits
 
-Requires Integreat v.0.5.0 or higher.
+Requires Integreat v.0.5.0 or higher. Node 8.
 
 ### Installing
 
