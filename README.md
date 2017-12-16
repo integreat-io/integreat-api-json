@@ -15,10 +15,14 @@ Requires Integreat v.0.5.0 or higher. Node 8.
 npm install integreat-api-json
 ```
 
+### Using
+
 `integreat-api-json` returns an array of general route objects, that may be
 given to a wrapper module for either Express (`integreat-express`) or Hapi
 (`integreat-hapi`). For other frameworks, either use the general route objects
 or [request a wrapper](https://github.com/integreat-io/integreat-api-json/issues).
+
+**Note:** `integreat-express` has not been implemented yet. Coming soon ...
 
 Example of use with Hapi:
 
@@ -29,7 +33,8 @@ const jsonapi = require('integreat-api-json')
 const greatHapi = require('integreat-hapi')
 
 const great = integreat(...)
-const routes = greatHapi(jsonapi(great))
+const options = {...}
+const routes = greatHapi(jsonapi(great, options))
 
 const server = new Hapi.Server()
 // ... whatever Hapi setup you need
@@ -46,7 +51,8 @@ const jsonapi = require('integreat-api-json')
 const greatExpress = require('integreat-express')
 
 const great = integreat(...)
-const routes = greatExpress(jsonapi(great))
+const options = {...}
+const routes = greatExpress(jsonapi(great, options))
 
 const app = express()
 // ... whatever Express setup you need
@@ -81,11 +87,7 @@ object. Expected `request` object from a GET request to `/entries/ent1/auth`:
 A `type` property, that indicates the type of resources, is added to the
 `request` object by the router, and will in this case be `entry`.
 
-### Running the tests
-
-The tests can be run with `npm test`.
-
-## What routes are created?
+### What routes are created?
 
 `integreat-api-json` will take all datatypes set up on the Integreat instance
 (`great` in the examples above), and make several routes for each datatype.
@@ -109,3 +111,31 @@ The following routes will be created:
 - `GET /entries/{id}/author`
 
 (POST, PATCH, and DELETE are coming ...)
+
+### Options
+
+There are two options available, `include` and `exclude`. Use them to specify
+which routes to include or exclude. If none of them are set, all possible routes
+will be generated from the datatypes. When both of them are set, `exclude` will
+have the final word, if there are conflicts.
+
+Example options:
+```
+{
+  include: ['entries', 'users'],
+  exclude: ['entries/id/author', 'users/id']
+}
+```
+
+This example will include all routes for `entries` and `users`, not including
+routes from any other datatypes, but will exclude the author endpoint for
+`entries` and the member endpoint (`id`) for users.
+
+This means that the following routes will be generated from this example:
+- `/entries`
+- `/entries/{id}`
+- `/users`
+
+## Running the tests
+
+The tests can be run with `npm test`.

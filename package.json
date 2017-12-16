@@ -17,25 +17,13 @@
   "ava": {
     "files": [
       "lib/**/*-test.js",
-      "test/**/*-test.js",
-      "test/helpers/*.js"
+      "tests/**/*-test.js",
+      "tests/helpers/*.js"
     ],
     "source": [
       "lib/**/!(*-test).js",
       "index.js"
-    ],
-    "babel": {
-      "presets": [
-        [
-          "env",
-          {
-            "targets": {
-              "node": "8.4"
-            }
-          }
-        ]
-      ]
-    }
+    ]
   },
   "nyc": {
     "exclude": [

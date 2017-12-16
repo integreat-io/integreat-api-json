@@ -1,0 +1,57 @@
+import test from 'ava'
+import sinon from 'sinon'
+import datatypes from './helpers/datatypes'
+import findRoute from './helpers/findRoute'
+
+import jsonapi from '..'
+
+test('should return route objects from Integreat instance', (t) => {
+  const great = {datatypes}
+
+  const routes = jsonapi(great)
+
+  t.true(Array.isArray(routes))
+  t.truthy(findRoute(routes, {path: '/entries', method: 'GET'}))
+  t.truthy(findRoute(routes, {path: '/users', method: 'GET'}))
+})
+
+test('should dispatch action on request', async (t) => {
+  const dispatch = sinon.stub().resolves({status: 'ok', data: [{id: 'ent1', type: 'entries'}]})
+  const great = {datatypes, dispatch}
+  const request = {method: 'GET', type: 'entry', path: '/entries'}
+  const expected = {type: 'GET', payload: {type: 'entry'}}
+
+  const routes = jsonapi(great)
+  const response = await routes[0].handler(request)
+
+  t.is(dispatch.callCount, 1)
+  t.deepEqual(dispatch.args[0][0], expected)
+  t.truthy(response)
+  t.is(response.statusCode, 200)
+  t.true(Array.isArray(response.body.data))
+  t.is(response.body.data[0].id, 'ent1')
+})
+
+test('should return only routes specified by include option', (t) => {
+  const great = {datatypes}
+  const options = {
+    include: ['entries']
+  }
+
+  const routes = jsonapi(great, options)
+
+  t.truthy(findRoute(routes, {path: '/entries', method: 'GET'}))
+  t.falsy(findRoute(routes, {path: '/users', method: 'GET'}))
+})
+
+test('should exclude routes specified by exclude option', (t) => {
+  const great = {datatypes}
+  const options = {
+    exclude: ['entries']
+  }
+
+  const routes = jsonapi(great, options)
+
+  t.falsy(findRoute(routes, {path: '/entries', method: 'GET'}))
+  t.truthy(findRoute(routes, {path: '/users', method: 'GET'}))
+})
