@@ -55,3 +55,17 @@ test('should exclude routes specified by exclude option', (t) => {
   t.falsy(findRoute(routes, {path: '/entries', method: 'GET'}))
   t.truthy(findRoute(routes, {path: '/users', method: 'GET'}))
 })
+
+test('should prefix routes', (t) => {
+  const great = {datatypes}
+  const options = {
+    prefix: '/1.0'
+  }
+
+  const routes = jsonapi(great, options)
+
+  t.falsy(findRoute(routes, {path: '/entries', method: 'GET'}))
+  t.truthy(findRoute(routes, {path: '/1.0/entries', method: 'GET'}))
+  t.truthy(findRoute(routes, {path: '/1.0/entries/{id}', method: 'GET'}))
+  t.truthy(findRoute(routes, {path: '/1.0/entries/{id}/author', method: 'GET'}))
+})
