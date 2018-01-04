@@ -1,3 +1,3 @@
-const routesFromIntegreat = require('./lib/routesFromIntegreat')
+const setupRouter = require('./lib/setupRouter')
 
-module.exports = routesFromIntegreat
+module.exports = setupRouter
