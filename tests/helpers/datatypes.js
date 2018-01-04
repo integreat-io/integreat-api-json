@@ -1,5 +1,5 @@
-module.exports = {
-  'entry': {
+module.exports = [
+  {
     id: 'entry',
     plural: 'entries',
     source: 'entries',
@@ -7,14 +7,15 @@ module.exports = {
       title: {type: 'string'}
     },
     relationships: {
-      author: {type: 'user'}
+      author: {type: 'user'},
+      comments: {type: 'comment', query: {article: 'id'}}
     }
   },
-  'user': {
+  {
     id: 'user',
     source: 'users',
     attributes: {
       name: {type: 'string'}
     }
   }
-}
+]

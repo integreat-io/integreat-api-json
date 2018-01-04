@@ -42,10 +42,8 @@
     "node": "8.4.x",
     "npm": ">= 5.4.2"
   },
-  "peerDependencies": {
-    "integreat": ">= 0.5.0"
-  },
   "devDependencies": {
+    "integreat": ">= 0.6.0",
     "ava": "^0.24.0",
     "babel-preset-env": "^1.6.1",
     "nyc": "^11.3.0",

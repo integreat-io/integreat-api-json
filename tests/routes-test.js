@@ -1,9 +1,15 @@
 import test from 'ava'
 import sinon from 'sinon'
-import datatypes from './helpers/datatypes'
 import findRoute from './helpers/findRoute'
+import integreat from 'integreat'
 
 import jsonapi from '..'
+
+// Helpers
+
+const {datatypes} = integreat({datatypes: require('./helpers/datatypes'), sources: []}, {adapters: {}})
+
+// Tests
 
 test('should return route objects from Integreat instance', (t) => {
   const great = {datatypes}
