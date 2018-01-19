@@ -22,9 +22,9 @@ test('should return route objects from Integreat instance', (t) => {
 })
 
 test('should dispatch action on request', async (t) => {
-  const dispatch = sinon.stub().resolves({status: 'ok', data: [{id: 'ent1', type: 'entries'}]})
+  const dispatch = sinon.stub().resolves({status: 'ok', data: [{id: 'ent1', type: 'entry'}]})
   const great = {datatypes, dispatch}
-  const request = {method: 'GET', type: 'entry', path: '/entries'}
+  const request = {method: 'GET', path: '/entries'}
   const expected = {type: 'GET', payload: {type: 'entry'}}
 
   const routes = jsonapi(great)
