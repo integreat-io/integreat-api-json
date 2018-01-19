@@ -64,9 +64,10 @@ The general route objects looks like this:
 
 ```
 const routes = [
-  {method: 'GET', path: `/entries`, handler: (request) => { ... }},
+  {method: ['GET', 'POST'], path: `/entries`, handler: (request) => { ... }},
   {method: 'GET', path: `/entries/{id}`, handler: (request) => { ... }},
-  {method: 'GET', path: `/entries/{id}/{relationship}`, handler: (request) => { ... }},
+  {method: 'GET', path: `/entries/{id}/author`, handler: (request) => { ... }},
+  {method: 'GET', path: `/entries/{id}/relationships/author`, handler: (request) => { ... }},
   ...
 ]
 ```
@@ -74,18 +75,16 @@ const routes = [
 Path parameters are specified with surrounding brackets.
 
 The `handlerFunction` accepts a `request` object and returns a `response`
-object. Expected `request` object from a GET request to `/entries/ent1/auth`:
-```
+object. Expected `request` object from a POST request to `/entries/ent1/auth`:
+
+```javascript
 {
-  method: 'GET',
-  id: 'ent1',
-  relationship: 'author',
-  path: '/entries/ent1/auth'
+  method: 'POST',
+  params: {id: 'ent1'},
+  path: '/entries/ent1/auth',
+  body: {...}
 }
 ```
-
-A `type` property, that indicates the type of resources, is added to the
-`request` object by the router, and will in this case be `entry`.
 
 ### What routes are created?
 
@@ -109,6 +108,8 @@ The following routes will be created:
 - `GET /entries`
 - `GET /entries/{id}`
 - `GET /entries/{id}/author`
+- `GET /entries/{id}/relationships/author`
+- `POST /entries`
 
 (POST, PATCH, and DELETE are coming ...)
 
