@@ -38,7 +38,6 @@ test('should GET from resource member endpoint', async (t) => {
 
   t.truthy(response)
   t.is(response.statusCode, 200)
-  t.truthy(response.body)
   t.deepEqual(response.body, expected)
 })
 
@@ -56,7 +55,7 @@ test('should respond with 404 when GETting unknown resource member', async (t) =
   t.is(response.statusMessage, 'Could not find /entries/ent0')
 })
 
-test('should PATCH to resource member endpoint', async (t) => {
+test('should PATCH resource member endpoint', async (t) => {
   const dispatch = sinon.stub()
     .resolves({
       status: 'ok',
@@ -115,11 +114,10 @@ test('should PATCH to resource member endpoint', async (t) => {
   t.deepEqual(dispatch.args[0][0], expectedAction)
   t.truthy(response)
   t.is(response.statusCode, 200)
-  t.truthy(response.body)
   t.deepEqual(response.body, expectedBody)
 })
 
-test('should respond with 404 when PATCHting unknown resource member', async (t) => {
+test('should respond with 404 when PATCHing unknown resource member', async (t) => {
   const dispatch = sinon.stub().resolves({status: 'notfound', error: 'Not found'})
   const great = {datatypes, dispatch}
   const request = {
@@ -131,6 +129,52 @@ test('should respond with 404 when PATCHting unknown resource member', async (t)
 
   const routes = jsonapi(great)
   const route = findRoute(routes, {path: '/entries/{id}', method: 'PATCH'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 404)
+  t.is(response.statusMessage, 'Could not find /entries/ent0')
+})
+
+test('should DELETE resource member endpoint', async (t) => {
+  const dispatch = sinon.stub().resolves({status: 'ok'})
+  const great = {datatypes, dispatch}
+  const request = {
+    method: 'DELETE',
+    params: {id: 'ent1'},
+    body: null,
+    path: '/entries/ent1'}
+  const expectedAction = {
+    type: 'DELETE',
+    payload: {
+      type: 'entry',
+      id: 'ent1',
+      useDefaults: false
+    }
+  }
+
+  const routes = jsonapi(great)
+  const route = findRoute(routes, {path: '/entries/{id}', method: 'DELETE'})
+  const response = await route.handler(request)
+
+  t.is(dispatch.callCount, 1)
+  t.deepEqual(dispatch.args[0][0], expectedAction)
+  t.truthy(response)
+  t.is(response.statusCode, 204)
+  t.falsy(response.body)
+})
+
+test('should respond with 404 when DELETEing unknown resource member', async (t) => {
+  const dispatch = sinon.stub().resolves({status: 'notfound', error: 'Not found'})
+  const great = {datatypes, dispatch}
+  const request = {
+    method: 'DELETE',
+    params: {id: 'ent0'},
+    path: '/entries/ent0'
+  }
+
+  const routes = jsonapi(great)
+  const route = findRoute(routes, {path: '/entries/{id}', method: 'DELETE'})
   const response = await route.handler(request)
 
   t.truthy(response)
