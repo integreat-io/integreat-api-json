@@ -27,7 +27,7 @@ test('should have relationship endpoint', async (t) => {
     .withArgs(sinon.match({type: 'GET', payload: {type: 'entry', id: 'ent1'}}))
     .resolves({status: 'ok', data: [ent1]})
   const great = {datatypes, dispatch}
-  const request = {method: 'GET', id: 'ent1', path: '/entries/ent1/relationships/author'}
+  const request = {method: 'GET', params: {id: 'ent1'}, path: '/entries/ent1/relationships/author'}
   const expected = {type: 'user', id: 'johnf'}
 
   const routes = jsonapi(great)
