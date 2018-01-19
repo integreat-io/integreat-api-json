@@ -25,7 +25,13 @@ test('should dispatch action on request', async (t) => {
   const dispatch = sinon.stub().resolves({status: 'ok', data: [{id: 'ent1', type: 'entry'}]})
   const great = {datatypes, dispatch}
   const request = {method: 'GET', path: '/entries'}
-  const expected = {type: 'GET', payload: {type: 'entry'}}
+  const expected = {
+    type: 'GET',
+    payload: {
+      type: 'entry',
+      useDefaults: true
+    }
+  }
 
   const routes = jsonapi(great)
   const response = await routes[0].handler(request)
