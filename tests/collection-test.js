@@ -1,25 +1,31 @@
 import test from 'ava'
 import sinon from 'sinon'
-import integreat from 'integreat'
+import integreat from '../../integreat'
 import findRoute from './helpers/findRoute'
-import {ent1} from './helpers/data'
+import adapters from './helpers/adapters'
 
 import jsonapi from '..'
 
 // Helpers
 
-const {datatypes} = integreat({datatypes: require('./helpers/datatypes'), sources: []}, {adapters: {}})
-
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
+
+const defs = {
+  datatypes: require('./helpers/datatypes'),
+  sources: [
+    {id: 'entries', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com'}}]}
+  ],
+  mappings: [
+    {type: 'entry', source: 'entries'}
+  ]
+}
+
+const great = integreat(defs, {adapters})
 
 // Tests
 
 test('should GET from resource collection endpoint', async (t) => {
-  const dispatch = sinon.stub()
-    .withArgs(sinon.match({type: 'GET', payload: {type: 'entry', id: sinon.match.typeOf('undefined')}}))
-    .resolves({status: 'ok', data: [{...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}}]})
-  const great = {datatypes, dispatch}
   const request = {method: 'GET', path: '/entries'}
   const expected = {data: [{
     id: 'ent1',
@@ -37,30 +43,15 @@ test('should GET from resource collection endpoint', async (t) => {
   const response = await route.handler(request)
 
   t.truthy(response)
-  t.is(response.statusCode, 200)
+  t.is(response.statusCode, 200, response.statusMessage)
   t.truthy(response.body)
   t.deepEqual(response.body, expected)
 })
 
 test('should POST to resource collection endpoint', async (t) => {
-  const createdAt = new Date()
-  const updatedAt = new Date()
-  const requestData = {
-    type: 'entry',
-    attributes: {title: 'Entry 2'},
-    relationships: {author: {id: 'johnf', type: 'user'}}
-  }
-  const responseData = [{
-    id: 'ent2',
-    type: 'entry',
-    attributes: {title: 'Entry 2', createdAt, updatedAt},
-    relationships: {author: {id: 'johnf', type: 'user'}}
-  }]
-  const dispatch = sinon.stub().resolves({status: 'error'})
-  dispatch.withArgs(sinon.match({type: 'SET', payload: {data: requestData}}))
-    .resolves({status: 'ok', data: responseData})
-  const great = {datatypes, dispatch}
+  const clock = sinon.useFakeTimers()
   const body = {data: {
+    id: 'ent2',
     type: 'entry',
     attributes: {
       title: 'Entry 2'
@@ -75,8 +66,8 @@ test('should POST to resource collection endpoint', async (t) => {
     id: 'ent2',
     attributes: {
       ...body.data.attributes,
-      createdAt,
-      updatedAt
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   }}
 
@@ -87,4 +78,6 @@ test('should POST to resource collection endpoint', async (t) => {
   t.truthy(response)
   t.is(response.statusCode, 201)
   t.deepEqual(response.body, expected)
+
+  clock.restore()
 })

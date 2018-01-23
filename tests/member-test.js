@@ -1,25 +1,31 @@
 import test from 'ava'
 import sinon from 'sinon'
-import integreat from 'integreat'
+import integreat from '../../integreat'
 import findRoute from './helpers/findRoute'
-import {ent1} from './helpers/data'
+import adapters from './helpers/adapters'
 
 import jsonapi from '..'
 
 // Helpers
 
-const {datatypes} = integreat({datatypes: require('./helpers/datatypes'), sources: []}, {adapters: {}})
-
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
+
+const defs = {
+  datatypes: require('./helpers/datatypes'),
+  sources: [
+    {id: 'entries', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com'}}]}
+  ],
+  mappings: [
+    {type: 'entry', source: 'entries'}
+  ]
+}
+
+const great = integreat(defs, {adapters})
 
 // Tests
 
 test('should GET from resource member endpoint', async (t) => {
-  const dispatch = sinon.stub()
-    .withArgs(sinon.match({type: 'GET', payload: {type: 'entry', id: 'ent1'}}))
-    .resolves({status: 'ok', data: [{...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}}]})
-  const great = {datatypes, dispatch}
   const request = {method: 'GET', params: {id: 'ent1'}, path: '/entries/ent1'}
   const expected = {data: {
     id: 'ent1',
@@ -37,13 +43,11 @@ test('should GET from resource member endpoint', async (t) => {
   const response = await route.handler(request)
 
   t.truthy(response)
-  t.is(response.statusCode, 200)
+  t.is(response.statusCode, 200, response.statusMessage)
   t.deepEqual(response.body, expected)
 })
 
 test('should respond with 404 when GETting unknown resource member', async (t) => {
-  const dispatch = sinon.stub().resolves({status: 'notfound', error: 'Not found'})
-  const great = {datatypes, dispatch}
   const request = {method: 'GET', params: {id: 'ent0'}, path: '/entries/ent0'}
 
   const routes = jsonapi(great)
@@ -55,17 +59,7 @@ test('should respond with 404 when GETting unknown resource member', async (t) =
   t.is(response.statusMessage, 'Could not find /entries/ent0')
 })
 
-test('should PATCH resource member endpoint', async (t) => {
-  const dispatch = sinon.stub()
-    .resolves({
-      status: 'ok',
-      data: [{
-        ...ent1,
-        attributes: {...ent1.attributes, createdAt, updatedAt},
-        relationships: {...ent1.relationships, comments: [{id: 'comment1', type: 'comment'}]}
-      }]
-    })
-  const great = {datatypes, dispatch}
+test.serial('should PATCH resource member endpoint', async (t) => {
   const request = {
     method: 'PATCH',
     params: {id: 'ent1'},
@@ -96,30 +90,28 @@ test('should PATCH resource member endpoint', async (t) => {
     id: 'ent1',
     type: 'entry',
     attributes: {
-      title: 'Entry 1',
-      createdAt,
-      updatedAt
+      title: 'Entry 1'
     },
     relationships: {
-      author: {data: {id: 'johnf', type: 'user'}},
       comments: {data: [{id: 'comment1', type: 'comment'}]}
     }
   }}
+  sinon.spy(great, 'dispatch')
 
   const routes = jsonapi(great)
   const route = findRoute(routes, {path: '/entries/{id}', method: 'PATCH'})
   const response = await route.handler(request)
 
-  t.is(dispatch.callCount, 1)
-  t.deepEqual(dispatch.args[0][0], expectedAction)
+  t.is(great.dispatch.callCount, 1)
+  t.deepEqual(great.dispatch.args[0][0], expectedAction)
   t.truthy(response)
-  t.is(response.statusCode, 200)
+  t.is(response.statusCode, 200, response.statusMessage)
   t.deepEqual(response.body, expectedBody)
+
+  great.dispatch.restore()
 })
 
 test('should respond with 404 when PATCHing unknown resource member', async (t) => {
-  const dispatch = sinon.stub().resolves({status: 'notfound', error: 'Not found'})
-  const great = {datatypes, dispatch}
   const request = {
     method: 'PATCH',
     params: {id: 'ent0'},
@@ -136,9 +128,7 @@ test('should respond with 404 when PATCHing unknown resource member', async (t) 
   t.is(response.statusMessage, 'Could not find /entries/ent0')
 })
 
-test('should DELETE resource member endpoint', async (t) => {
-  const dispatch = sinon.stub().resolves({status: 'ok'})
-  const great = {datatypes, dispatch}
+test.serial('should DELETE resource member endpoint', async (t) => {
   const request = {
     method: 'DELETE',
     params: {id: 'ent1'},
@@ -152,21 +142,22 @@ test('should DELETE resource member endpoint', async (t) => {
       useDefaults: false
     }
   }
+  sinon.spy(great, 'dispatch')
 
   const routes = jsonapi(great)
   const route = findRoute(routes, {path: '/entries/{id}', method: 'DELETE'})
   const response = await route.handler(request)
 
-  t.is(dispatch.callCount, 1)
-  t.deepEqual(dispatch.args[0][0], expectedAction)
+  t.is(great.dispatch.callCount, 1)
+  t.deepEqual(great.dispatch.args[0][0], expectedAction)
   t.truthy(response)
   t.is(response.statusCode, 204)
   t.falsy(response.body)
+
+  great.dispatch.restore()
 })
 
 test('should respond with 404 when DELETEing unknown resource member', async (t) => {
-  const dispatch = sinon.stub().resolves({status: 'notfound', error: 'Not found'})
-  const great = {datatypes, dispatch}
   const request = {
     method: 'DELETE',
     params: {id: 'ent0'},
