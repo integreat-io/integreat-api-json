@@ -84,7 +84,8 @@ test.serial('should PATCH resource member endpoint', async (t) => {
         relationships: {comments: [{id: 'comment1', type: 'comment'}]}
       },
       useDefaults: false
-    }
+    },
+    meta: {queue: true}
   }
   sinon.spy(great, 'dispatch')
 
@@ -96,6 +97,26 @@ test.serial('should PATCH resource member endpoint', async (t) => {
   t.deepEqual(great.dispatch.args[0][0], expectedAction)
   t.truthy(response)
   t.is(response.statusCode, 204, response.statusMessage)
+  t.falsy(response.body)
+
+  great.dispatch.restore()
+})
+
+test.serial('should respond with 202 when action is sent to a queue', async (t) => {
+  const request = {
+    method: 'PATCH',
+    params: {id: 'ent1'},
+    path: '/entries/ent1',
+    body: {data: {id: 'ent1', type: 'entry', attributes: {title: 'Entry 1'}}}
+  }
+  sinon.stub(great, 'dispatch').resolves({status: 'queued'})
+
+  const routes = jsonapi(great)
+  const route = findRoute(routes, {path: '/entries/{id}', method: 'PATCH'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 202)
   t.falsy(response.body)
 
   great.dispatch.restore()
@@ -130,7 +151,8 @@ test.serial('should DELETE resource member endpoint', async (t) => {
       type: 'entry',
       id: 'ent1',
       useDefaults: false
-    }
+    },
+    meta: {queue: true}
   }
   sinon.spy(great, 'dispatch')
 
