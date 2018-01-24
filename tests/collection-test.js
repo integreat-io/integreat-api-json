@@ -76,7 +76,7 @@ test('should POST to resource collection endpoint', async (t) => {
   const response = await route.handler(request)
 
   t.truthy(response)
-  t.is(response.statusCode, 201)
+  t.is(response.statusCode, 201, response.statusMessage)
   t.deepEqual(response.body, expected)
 
   clock.restore()

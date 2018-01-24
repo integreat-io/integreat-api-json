@@ -17,5 +17,12 @@ module.exports = [
     attributes: {
       name: {type: 'string'}
     }
+  },
+  {
+    id: 'comment',
+    source: 'comments',
+    attributes: {
+      text: 'string'
+    }
   }
 ]

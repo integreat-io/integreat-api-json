@@ -4,7 +4,7 @@ const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
 
 const identityFn = (arg) => arg
-const send = async ({type, params, action, data, relationship, isRelationship}) => {
+const send = async ({type, params, action, data, relationship}) => {
   if (action === 'GET') {
     if (type === 'entry') {
       if (typeof params.id === 'undefined' || params.id === 'ent1') {
@@ -19,20 +19,13 @@ const send = async ({type, params, action, data, relationship, isRelationship}) 
   if (action === 'SET') {
     if (data.type === 'entry') {
       if (data.id === 'ent1') {
-        if (isRelationship && relationship === 'author') {
-          return {
-            status: 'ok',
-            data: [{...ent1, relationships: {...ent1.relationships, author: {id: 'lucyk', type: 'user'}}}]
-          }
-        } else {
-          return {
-            status: 'ok',
-            data: [{
-              ...ent1,
-              attributes: {...ent1.attributes, createdAt, updatedAt},
-              relationships: {...ent1.relationships, comments: [{id: 'comment1', type: 'comment'}]}
-            }]
-          }
+        return {
+          status: 'ok',
+          data: [{
+            ...ent1,
+            attributes: {...ent1.attributes, createdAt, updatedAt},
+            relationships: {...ent1.relationships, comments: [{id: 'comment1', type: 'comment'}]}
+          }]
         }
       } else if (data.id === 'ent2') {
         return {

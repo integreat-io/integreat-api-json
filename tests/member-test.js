@@ -86,16 +86,6 @@ test.serial('should PATCH resource member endpoint', async (t) => {
       useDefaults: false
     }
   }
-  const expectedBody = {data: {
-    id: 'ent1',
-    type: 'entry',
-    attributes: {
-      title: 'Entry 1'
-    },
-    relationships: {
-      comments: {data: [{id: 'comment1', type: 'comment'}]}
-    }
-  }}
   sinon.spy(great, 'dispatch')
 
   const routes = jsonapi(great)
@@ -105,8 +95,8 @@ test.serial('should PATCH resource member endpoint', async (t) => {
   t.is(great.dispatch.callCount, 1)
   t.deepEqual(great.dispatch.args[0][0], expectedAction)
   t.truthy(response)
-  t.is(response.statusCode, 200, response.statusMessage)
-  t.deepEqual(response.body, expectedBody)
+  t.is(response.statusCode, 204, response.statusMessage)
+  t.falsy(response.body)
 
   great.dispatch.restore()
 })
