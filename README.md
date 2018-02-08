@@ -75,14 +75,15 @@ const routes = [
 Path parameters are specified with surrounding brackets.
 
 The `handlerFunction` accepts a `request` object and returns a `response`
-object. Expected `request` object from a POST request to `/entries/ent1/auth`:
+object. Expected `request` object from a POST request to `/entries/ent1/author`:
 
 ```javascript
 {
   method: 'POST',
   params: {id: 'ent1'},
-  path: '/entries/ent1/auth',
-  body: {...}
+  path: '/entries/ent1/author',
+  body: {...},
+  headers: {...}
 }
 ```
 

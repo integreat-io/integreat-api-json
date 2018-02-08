@@ -1,9 +1,10 @@
-const {ent1} = require('./data')
+const {ent1, johnf} = require('./data')
 
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
 
 const identityFn = (arg) => arg
+
 const send = async ({type, params, action, data, relationship}) => {
   if (action === 'GET') {
     if (type === 'entry') {
@@ -12,6 +13,11 @@ const send = async ({type, params, action, data, relationship}) => {
           status: 'ok',
           data: [{...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}}]
         }
+      }
+    } else if (type === 'user' && (params.id === 'johnf' || params.tokens === 'twitter|23456')) {
+      return {
+        status: 'ok',
+        data: [{...johnf, attributes: {...johnf.attributes, createdAt, updatedAt}}]
       }
     }
   }

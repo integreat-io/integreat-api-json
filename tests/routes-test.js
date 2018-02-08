@@ -30,7 +30,8 @@ test('should dispatch action on request', async (t) => {
     payload: {
       type: 'entry',
       useDefaults: true
-    }
+    },
+    meta: {ident: null}
   }
 
   const routes = jsonapi(great)

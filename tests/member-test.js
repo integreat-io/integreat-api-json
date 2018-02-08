@@ -85,7 +85,7 @@ test.serial('should PATCH resource member endpoint', async (t) => {
       },
       useDefaults: false
     },
-    meta: {queue: true}
+    meta: {queue: true, ident: null}
   }
   sinon.spy(great, 'dispatch')
 
@@ -152,7 +152,7 @@ test.serial('should DELETE resource member endpoint', async (t) => {
       id: 'ent1',
       useDefaults: false
     },
-    meta: {queue: true}
+    meta: {queue: true, ident: null}
   }
   sinon.spy(great, 'dispatch')
 

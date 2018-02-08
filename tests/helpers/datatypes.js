@@ -15,8 +15,10 @@ module.exports = [
     id: 'user',
     source: 'users',
     attributes: {
-      name: {type: 'string'}
-    }
+      name: {type: 'string'},
+      tokens: 'string[]'
+    },
+    access: 'auth'
   },
   {
     id: 'comment',

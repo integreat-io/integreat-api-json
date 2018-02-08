@@ -8,5 +8,14 @@ module.exports = {
     relationships: {
       author: {id: 'johnf', type: 'user'}
     }
+  },
+
+  johnf: {
+    id: 'johnf',
+    type: 'user',
+    attributes: {
+      name: 'John F.',
+      tokens: ['twitter|23456']
+    }
   }
 }
