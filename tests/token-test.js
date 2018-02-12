@@ -39,7 +39,8 @@ test('should respond with access token', async (t) => {
   const options = {
     secret,
     host,
-    authSource: 'twitter'
+    authSource: 'twitter',
+    tokenEndpoint: 'token'
   }
   const request = {
     method: 'POST',
@@ -68,4 +69,17 @@ test('should respond with access token', async (t) => {
   t.deepEqual(response.body, expected)
 
   clock.restore()
+})
+
+test('should not have token endpoint when not specified in options', async (t) => {
+  const options = {
+    secret,
+    host,
+    authSource: 'twitter'
+  }
+
+  const routes = jsonapi(great, options)
+  const route = findRoute(routes, {path: '/token', method: 'POST'})
+
+  t.falsy(route)
 })
