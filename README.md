@@ -87,6 +87,32 @@ object. Expected `request` object from a POST request to `/entries/ent1/author`:
 }
 ```
 
+### Authentication
+
+`integreat-api-json` does not configure security on its own. This is instead
+set up on the Integreat instance, and the json api is simply following its lead.
+
+This will always happen: When a request has an `Authentication` header with
+a `Bearer` value, it will be treated as a JWT token, and the `sub` property
+of its payload will be treated as the id of an ident and set on the
+`meta.ident.id` of the created action. Integreat handles all authorization.
+
+The JWT secret is set as a json api option.
+
+When Integreat is set up with authentication, a token endpoint will be created.
+The default is `/token`, but this may be overriden by the `tokenEndpoint`
+option. This endpoint follows the
+[OpenId Connect specification (3.1.3)](http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint),
+but will also accept a request body in JSON.
+
+Put simple, by sending an authentication code to this endpoint, you receive an
+auth token that can be used for further requests to the json api as a bearer in
+the `Authorization` header.
+
+For this endpoint to work, you need to set up an auth api as an Intgreat source,
+and provide the source's name in the `authSource` option to json api. The mapped
+id retrieved from this source will be used as a token to retrieve an ident from.
+
 ### What routes are created?
 
 `integreat-api-json` will take all datatypes set up on the Integreat instance
@@ -116,14 +142,20 @@ The following routes will be created:
 
 ### Options
 
-There are two options available, `include` and `exclude`. Use them to specify
-which routes to include or exclude. If none of them are set, all possible routes
+- `include` - Specify routes to include
+- `exclude` - Specify routes to exclude
+- `tokenEndpoint` - Override name of token endpoint
+- `secret` - JWT secret
+- `authSource` - Name of Integreat source to get ident token from
+
+A not on `include` and `exclude`: If none of them are set, all possible routes
 will be generated from the datatypes. When both of them are set, `exclude` will
 have the final word, if there are conflicts.
 
 Example options:
 ```
 {
+  tokenEndpoint: 'auth',
   include: ['entries', 'users'],
   exclude: ['entries/id/author', 'users/id']
 }
@@ -133,10 +165,14 @@ This example will include all routes for `entries` and `users`, not including
 routes from any other datatypes, but will exclude the author endpoint for
 `entries` and the member endpoint (`id`) for users.
 
+In addition, a token endpoint name `auth` will be created, given that Integreat
+is set up with authentication.
+
 This means that the following routes will be generated from this example:
 - `/entries`
 - `/entries/{id}`
 - `/users`
+- `/auth`
 
 ## Running the tests
 
