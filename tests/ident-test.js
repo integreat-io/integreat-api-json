@@ -32,6 +32,10 @@ const unknownJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
   'eyJzdWIiOiJ1bmtub3duIiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOjE' +
   '1MjA4ODMzODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
   'JRE_oMfmaqqsUqW5edk367hV-67DSmieH45TrzLENqY'
+const tokenJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+  'eyJzdWIiOiJ0d2l0dGVyfDIzNDU2IiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOj' +
+  'E1MjA4ODMzODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
+  'roK8giQ2LDm0YwTV5psW8bgt4YOgHdSj4kKCgjv6gtU'
 const secret = 's3cr3t'
 const host = 'https://example.com'
 
@@ -51,6 +55,35 @@ test('should respond with item corresponding to ident', async (t) => {
     path: '/ident',
     headers: {
       Authorization: `Bearer ${validJwt}`
+    }
+  }
+  const expectedBody = {data: {
+    ...johnf,
+    attributes: {...johnf.attributes, createdAt, updatedAt}}
+  }
+
+  const routes = jsonapi(great, options)
+  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 200, response.statusMessage)
+  t.deepEqual(response.body, expectedBody)
+})
+
+test('should treat jwt sub as token when specified', async (t) => {
+  const options = {
+    secret,
+    host,
+    identEndpoint: 'ident',
+    jwtSub: 'withToken'
+  }
+  const request = {
+    method: 'GET',
+    params: {},
+    path: '/ident',
+    headers: {
+      Authorization: `Bearer ${tokenJwt}`
     }
   }
   const expectedBody = {data: {
