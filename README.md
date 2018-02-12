@@ -153,6 +153,7 @@ The following routes will be created:
 - `include` - Specify routes to include
 - `exclude` - Specify routes to exclude
 - `tokenEndpoint` - Name of token endpoint, which is only added when this is set
+- `identEndpoint` - Name of ident endpoint, which is only added when this is set
 - `secret` - JWT secret
 - `authSource` - Name of Integreat source to get ident token from
 - `jwtSub` - Ident prop to set to `sub` value from JWT on auth. Default is `id`

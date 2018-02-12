@@ -82,3 +82,37 @@ test('should not have token endpoint when not specified in options', async (t) =
 
   t.falsy(route)
 })
+
+test('should respond with invalid_grant when no ident type set', async (t) => {
+  const noidentDefs = {
+    datatypes: defs.datatypes,
+    sources: defs.sources,
+    mappings: defs.mappings
+  }
+  const great = integreat(noidentDefs, {adapters})
+  const options = {
+    secret,
+    host,
+    authSource: 'twitter',
+    tokenEndpoint: 'token'
+  }
+  const request = {
+    method: 'POST',
+    params: {},
+    path: '/token',
+    body: {
+      grant_type: 'authorization_code',
+      code: '12345',
+      client_id: 'app1'
+    }
+  }
+  const expected = {error: 'invalid_grant'}
+
+  const routes = jsonapi(great, options)
+  const route = findRoute(routes, {path: '/token', method: 'POST'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 400, response.statusMessage)
+  t.deepEqual(response.body, expected)
+})
