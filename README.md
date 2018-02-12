@@ -99,9 +99,11 @@ of its payload will be treated as the id of an ident and set on the
 
 The JWT secret is set as a json api option.
 
+#### Token endpoint
+
 When Integreat is set up with authentication, you may add a token endpoint will
 by setting the `tokenEndpoint` to the uri path you want for the endpoint, e.g.
-`token`. This endpoint follows the
+`/token`. This endpoint follows the
 [OpenId Connect specification (3.1.3)](http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint),
 but will also accept a request body in JSON.
 
@@ -112,6 +114,12 @@ the `Authorization` header.
 For this endpoint to work, you need to set up an auth api as an Intgreat source,
 and provide the source's name in the `authSource` option to json api. The mapped
 id retrieved from this source will be used as a token to retrieve an ident from.
+
+#### Ident endpoint
+
+You may also setup an ident endpoint, that will return the data item
+corresponding with an authenticated ident. Set the option `identEndpoint` to the
+wanted endpoint path, e.g. `/ident`.
 
 ### What routes are created?
 

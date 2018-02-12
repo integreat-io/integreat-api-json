@@ -65,7 +65,6 @@ test('should respond with access token', async (t) => {
 
   t.truthy(response)
   t.is(response.statusCode, 200, response.statusMessage)
-  t.truthy(response.body)
   t.deepEqual(response.body, expected)
 
   clock.restore()

@@ -2,10 +2,14 @@ import test from 'ava'
 import integreat from '../../integreat'
 import findRoute from './helpers/findRoute'
 import adapters from './helpers/adapters'
+import {johnf} from './helpers/data'
 
 import jsonapi from '..'
 
 // Helpers
+
+const createdAt = new Date('2018-01-03T12:22:11Z')
+const updatedAt = new Date('2018-01-23T17:01:59Z')
 
 const defs = {
   datatypes: require('./helpers/datatypes'),
@@ -20,45 +24,103 @@ const defs = {
   }
 }
 
-const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZiIsImlhdCI6MTIzNDV9.XaA_jBXyjwhYgqfK9whtZ1LshcNh1IzD3tPWLtg_meY'
-
-const createdAt = new Date('2018-01-03T12:22:11Z')
-const updatedAt = new Date('2018-01-23T17:01:59Z')
+const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+  'eyJzdWIiOiJqb2huZiIsImlhdCI6MTUxODI5MTM4OCwiZXhwIjoxNTI' +
+  'wODgzMzg4LCJpc3MiOiJodHRwczovL2V4YW1wbGUuY29tIiwiYXVkIjoiYXBwMSJ9.' +
+  'Vl5mtuLNYuuL7i9umkTgw64ukf85b5_kvj1pBQJwLKI'
+const unknownJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+  'eyJzdWIiOiJ1bmtub3duIiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOjE' +
+  '1MjA4ODMzODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
+  'JRE_oMfmaqqsUqW5edk367hV-67DSmieH45TrzLENqY'
+const secret = 's3cr3t'
+const host = 'https://example.com'
 
 const great = integreat(defs, {adapters})
 
 // Tests
 
-test('should GET relationship endpoint', async (t) => {
+test('should respond with item corresponding to ident', async (t) => {
   const options = {
-    secret: 's3cr3t'
+    secret,
+    host,
+    identEndpoint: 'ident'
   }
   const request = {
     method: 'GET',
-    params: {id: 'johnf'},
-    path: '/users/johnf',
+    params: {},
+    path: '/ident',
     headers: {
       Authorization: `Bearer ${validJwt}`
     }
   }
-  const expected = {data: {
-    id: 'johnf',
-    type: 'user',
-    attributes: {
-      name: 'John F.',
-      tokens: ['twitter|23456'],
-      createdAt,
-      updatedAt
-    },
-    relationships: {}
-  }}
+  const expectedBody = {data: {
+    ...johnf,
+    attributes: {...johnf.attributes, createdAt, updatedAt}}
+  }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/users/{id}', method: 'GET'})
+  const route = findRoute(routes, {path: '/ident', method: 'GET'})
   const response = await route.handler(request)
 
   t.truthy(response)
   t.is(response.statusCode, 200, response.statusMessage)
-  t.truthy(response.body)
-  t.deepEqual(response.body, expected)
+  t.deepEqual(response.body, expectedBody)
+})
+
+test('should respond with 401 when no authenticated ident', async (t) => {
+  const options = {
+    secret,
+    host,
+    identEndpoint: 'ident'
+  }
+  const request = {
+    method: 'GET',
+    params: {},
+    path: '/ident',
+    headers: {
+      Authorization: `Bearer invalid`
+    }
+  }
+
+  const routes = jsonapi(great, options)
+  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 401, response.statusMessage)
+})
+
+test('should respond with 404 when item for ident is not found', async (t) => {
+  const options = {
+    secret,
+    host,
+    identEndpoint: 'ident'
+  }
+  const request = {
+    method: 'GET',
+    params: {},
+    path: '/ident',
+    headers: {
+      Authorization: `Bearer ${unknownJwt}`
+    }
+  }
+
+  const routes = jsonapi(great, options)
+  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 404, response.statusMessage)
+})
+
+test('should not create endpoint unless specified', async (t) => {
+  const options = {
+    secret,
+    host
+  }
+
+  const routes = jsonapi(great, options)
+  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+
+  t.falsy(route)
 })
