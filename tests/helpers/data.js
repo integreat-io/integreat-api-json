@@ -16,6 +16,7 @@ module.exports = {
     attributes: {
       name: 'John F.',
       tokens: ['twitter|23456']
-    }
+    },
+    relationships: {}
   }
 }

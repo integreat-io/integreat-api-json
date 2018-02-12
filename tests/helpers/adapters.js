@@ -19,6 +19,11 @@ const send = async ({type, params, action, data, relationship}) => {
         status: 'ok',
         data: [{...johnf, attributes: {...johnf.attributes, createdAt, updatedAt}}]
       }
+    } else if (params.authCode === '12345') {
+      return {
+        status: 'ok',
+        data: [{body: {id: 'twitter|23456'}}]
+      }
     }
   }
 
