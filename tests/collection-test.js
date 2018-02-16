@@ -27,16 +27,20 @@ const great = integreat(defs, {adapters})
 
 test('should GET from resource collection endpoint', async (t) => {
   const request = {method: 'GET', path: '/entries'}
-  const expected = {data: [{
-    id: 'ent1',
-    type: 'entry',
-    attributes: {
-      title: 'Entry 1',
-      createdAt,
-      updatedAt
+  const expected = {data: [
+    {
+      id: 'ent1',
+      type: 'entry',
+      attributes: {title: 'Entry 1', createdAt, updatedAt},
+      relationships: {author: {data: {id: 'johnf', type: 'user'}}}
     },
-    relationships: {author: {data: {id: 'johnf', type: 'user'}}}
-  }]}
+    {
+      id: 'ent2',
+      type: 'entry',
+      attributes: {title: 'Entry 2', createdAt, updatedAt},
+      relationships: {author: {data: {id: 'lucyk', type: 'user'}}}
+    }
+  ]}
 
   const routes = jsonapi(great)
   const route = findRoute(routes, {path: '/entries', method: 'GET'})
