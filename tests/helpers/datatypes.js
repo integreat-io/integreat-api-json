@@ -26,5 +26,13 @@ module.exports = [
     attributes: {
       text: 'string'
     }
+  },
+  {
+    id: 'meta',
+    source: 'store',
+    internal: true,
+    attributes: {
+      lastUpdatedAt: 'date'
+    }
   }
 ]
