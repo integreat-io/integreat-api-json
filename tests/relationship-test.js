@@ -1,5 +1,5 @@
 import test from 'ava'
-import integreat from '../../integreat'
+import integreat from 'integreat'
 import findRoute from './helpers/findRoute'
 import adapters from './helpers/adapters'
 

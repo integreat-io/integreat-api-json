@@ -5,9 +5,9 @@ const updatedAt = new Date('2018-01-23T17:01:59Z')
 
 const identityFn = (arg) => arg
 
-const send = async ({type, params, action, data, relationship}) => {
+const send = async ({params, action, data, relationship}) => {
   if (action === 'GET') {
-    if (type === 'entry') {
+    if (params.type === 'entry') {
       if (params.id === 'ent1') {
         return {
           status: 'ok',
@@ -22,7 +22,7 @@ const send = async ({type, params, action, data, relationship}) => {
           ]
         }
       }
-    } else if (type === 'user' && (params.id === 'johnf' || params.tokens === 'twitter|23456')) {
+    } else if (params.type === 'user' && (params.id === 'johnf' || params.tokens === 'twitter|23456')) {
       return {
         status: 'ok',
         data: [{...johnf, attributes: {...johnf.attributes, createdAt, updatedAt}}]
