@@ -11,7 +11,7 @@ A rest api for Integreat, supporting JSON and specifically
 
 ### Prerequisits
 
-Requires Integreat v.0.5.0 or higher. Node 8.
+Requires Integreat v0.6 or higher. Node v8.6.
 
 ### Installing
 
@@ -76,7 +76,7 @@ const routes = [
 ]
 ```
 
-Path parameters are specified with surrounding brackets.
+Path parameters are specified with surrounding curly brackets.
 
 The `handlerFunction` accepts a `request` object and returns a `response`
 object. Expected `request` object from a POST request to `/entries/ent1/author`:
