@@ -1,0 +1,84 @@
+const {ent1, ent2, johnf} = require('./data')
+
+const createdAt = new Date('2018-01-03T12:22:11Z')
+const updatedAt = new Date('2018-01-23T17:01:59Z')
+
+const identityFn = (arg) => arg
+
+const send = async ({params, action, data, relationship}) => {
+  if (action === 'GET') {
+    if (params.type === 'entry') {
+      if (params.id === 'ent1') {
+        return {
+          status: 'ok',
+          data: [{...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}}]
+        }
+      } else if (typeof params.id === 'undefined') {
+        return {
+          status: 'ok',
+          data: [
+            {...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}},
+            {...ent2, attributes: {...ent2.attributes, createdAt, updatedAt}}
+          ]
+        }
+      }
+    } else if (params.type === 'user' && (params.id === 'johnf' || params.tokens === 'twitter|23456')) {
+      return {
+        status: 'ok',
+        data: [{...johnf, attributes: {...johnf.attributes, createdAt, updatedAt}}]
+      }
+    } else if (params.authCode === '12345') {
+      return {
+        status: 'ok',
+        data: [{body: {id: 'twitter|23456'}}]
+      }
+    }
+  }
+
+  if (action === 'SET') {
+    if (data.type === 'entry') {
+      if (data.id === 'ent1') {
+        return {
+          status: 'ok',
+          data: [{
+            ...ent1,
+            attributes: {...ent1.attributes, createdAt, updatedAt},
+            relationships: {...ent1.relationships, comments: [{id: 'comment1', type: 'comment'}]}
+          }]
+        }
+      } else if (data.id === 'ent2') {
+        return {
+          status: 'ok',
+          data: [{
+            id: 'ent2',
+            type: 'entry',
+            attributes: {title: 'Entry 2', createdAt, updatedAt},
+            relationships: {author: {id: 'johnf', type: 'user'}}
+          }]
+        }
+      }
+    }
+  }
+
+  if (action === 'DELETE') {
+    if (params.id === 'ent1') {
+      return {status: 'ok'}
+    }
+  }
+
+  return {status: 'notfound', error: 'Not found'}
+}
+
+const adapters = {
+  mock: {
+    prepareEndpoint: identityFn,
+    send,
+    normalize: identityFn,
+    serialize: identityFn
+  },
+  none: {
+    prepareEndpoint: identityFn
+  }
+}
+
+module.exports = adapters
