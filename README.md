@@ -3,6 +3,10 @@
 A rest api for Integreat, supporting JSON and specifically
 [the JSON API standard](http://jsonapi.org).
 
+[![Build Status](https://travis-ci.org/integreat-io/integreat-api-json.svg?branch=master)](https://travis-ci.org/integreat-io/integreat-api-json)
+[![Coverage Status](https://coveralls.io/repos/github/integreat-io/integreat-api-json/badge.svg?branch=master)](https://coveralls.io/github/integreat-io/integreat-api-json?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b1a55e5d7e8823d756a7/maintainability)](https://codeclimate.com/github/integreat-io/integreat-api-json/maintainability)
+
 ## Getting started
 
 ### Prerequisits
