@@ -25,17 +25,17 @@ const defs = {
 }
 
 const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
-  'eyJzdWIiOiJqb2huZiIsImlhdCI6MTUxODI5MTM4OCwiZXhwIjoxNTI' +
-  'wODgzMzg4LCJpc3MiOiJodHRwczovL2V4YW1wbGUuY29tIiwiYXVkIjoiYXBwMSJ9.' +
-  'Vl5mtuLNYuuL7i9umkTgw64ukf85b5_kvj1pBQJwLKI'
+  'eyJzdWIiOiJqb2huZiIsImlhdCI6MTUxODI5MTM4OCwiZXhwIjo1NTIwODgzMzg' +
+  '4LCJpc3MiOiJodHRwczovL2V4YW1wbGUuY29tIiwiYXVkIjoiYXBwMSJ9.' +
+  'q4FCDcZ9zrkSOrO2pq1R16eWcD4WM9Pp4jtmnsHKnS8'
 const unknownJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
-  'eyJzdWIiOiJ1bmtub3duIiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOjE' +
-  '1MjA4ODMzODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
-  'JRE_oMfmaqqsUqW5edk367hV-67DSmieH45TrzLENqY'
+  'eyJzdWIiOiJ1bmtub3duIiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOjU1MjA4ODM' +
+  'zODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
+  '-GzijZwcztlXfj4HkS16_7M74GhcoAPhVcx1I7nrgeQ'
 const tokenJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
-  'eyJzdWIiOiJ0d2l0dGVyfDIzNDU2IiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOj' +
-  'E1MjA4ODMzODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
-  'roK8giQ2LDm0YwTV5psW8bgt4YOgHdSj4kKCgjv6gtU'
+  'eyJzdWIiOiJ0d2l0dGVyfDIzNDU2IiwiaWF0IjoxNTE4MjkxMzg4LCJleHAiOjU1' +
+  'MjA4ODMzODgsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJhdWQiOiJhcHAxIn0.' +
+  'azdvMauU8vOHVIvuWfoJNfegOvsSTvWvt7YmLmPtpcE'
 const secret = 's3cr3t'
 const host = 'https://example.com'
 
