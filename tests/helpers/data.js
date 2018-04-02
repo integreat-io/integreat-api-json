@@ -39,5 +39,41 @@ module.exports = {
       tokens: ['twitter|23457']
     },
     relationships: {}
+  },
+
+  page1: {
+    id: 'page1',
+    type: 'page',
+    attributes: {
+      title: 'Page 1'
+    },
+    relationships: {}
+  },
+
+  page2: {
+    id: 'page2',
+    type: 'page',
+    attributes: {
+      title: 'Page 2'
+    },
+    relationships: {}
+  },
+
+  page3: {
+    id: 'page3',
+    type: 'page',
+    attributes: {
+      title: 'Page 3'
+    },
+    relationships: {}
+  },
+
+  page4: {
+    id: 'page4',
+    type: 'page',
+    attributes: {
+      title: 'Page 4'
+    },
+    relationships: {}
   }
 }

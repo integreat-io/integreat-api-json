@@ -28,6 +28,13 @@ module.exports = [
     }
   },
   {
+    id: 'page',
+    source: 'pages',
+    attributes: {
+      title: 'string'
+    }
+  },
+  {
     id: 'meta',
     source: 'store',
     internal: true,

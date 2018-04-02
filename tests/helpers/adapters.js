@@ -1,9 +1,14 @@
-const {ent1, ent2, johnf} = require('./data')
+const {ent1, ent2, johnf, page1, page2, page3, page4} = require('./data')
 
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
 
 const identityFn = (arg) => arg
+
+const setDateAttrs = (data) => data.map((item) => ({
+  ...item,
+  attributes: {...item.attributes, createdAt, updatedAt}
+}))
 
 const send = async ({params, action, data, relationship}) => {
   if (action === 'GET') {
@@ -11,21 +16,36 @@ const send = async ({params, action, data, relationship}) => {
       if (params.id === 'ent1') {
         return {
           status: 'ok',
-          data: [{...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}}]
+          data: setDateAttrs([ent1])
         }
       } else if (typeof params.id === 'undefined') {
         return {
           status: 'ok',
-          data: [
-            {...ent1, attributes: {...ent1.attributes, createdAt, updatedAt}},
-            {...ent2, attributes: {...ent2.attributes, createdAt, updatedAt}}
-          ]
+          data: setDateAttrs([ent1, ent2])
         }
       }
     } else if (params.type === 'user' && (params.id === 'johnf' || params.tokens === 'twitter|23456')) {
       return {
         status: 'ok',
-        data: [{...johnf, attributes: {...johnf.attributes, createdAt, updatedAt}}]
+        data: setDateAttrs([johnf])
+      }
+    } else if (params.type === 'page') {
+      if (!params.pageAfter) {
+        return {
+          status: 'ok',
+          data: setDateAttrs([page1, page2]),
+          paging: {
+            next: {type: 'page', pageSize: 2, pageAfter: 'page2'}
+          }
+        }
+      } else if (params.pageAfter === 'page2') {
+        return {
+          status: 'ok',
+          data: setDateAttrs([page3, page4]),
+          paging: {
+            next: {type: 'page', pageSize: 2, pageAfter: 'page4'}
+          }
+        }
       }
     } else if (params.authCode === '12345') {
       return {
@@ -40,11 +60,10 @@ const send = async ({params, action, data, relationship}) => {
       if (data.id === 'ent1') {
         return {
           status: 'ok',
-          data: [{
+          data: setDateAttrs([{
             ...ent1,
-            attributes: {...ent1.attributes, createdAt, updatedAt},
             relationships: {...ent1.relationships, comments: [{id: 'comment1', type: 'comment'}]}
-          }]
+          }])
         }
       } else if (data.id === 'ent2') {
         return {
