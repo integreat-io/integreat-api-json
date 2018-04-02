@@ -1,6 +1,6 @@
 {
   "name": "integreat-api-json",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Integreat json api",
   "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no> (http://kjellmorten.no)",
   "license": "ISC",
@@ -47,10 +47,10 @@
     "ava": "^0.25.0",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
-    "integreat": "^0.6.0",
-    "nyc": "^11.4.1",
-    "sinon": "^4.4.2",
-    "standard": "^11.0.0"
+    "integreat": "^0.6.2",
+    "nyc": "^11.6.0",
+    "sinon": "^4.5.0",
+    "standard": "^11.0.1"
   },
   "dependencies": {
     "jsonwebtoken": "^8.2.0"
