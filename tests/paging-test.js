@@ -33,6 +33,9 @@ test('should GET first page', async (t) => {
     path: '/pages?page=2',
     params: {page: 2}
   }
+  const options = {
+    baseUri: 'https://api.somesite.com'
+  }
   const expected = {
     data: [
       {
@@ -52,11 +55,11 @@ test('should GET first page', async (t) => {
       first: null,
       last: null,
       prev: null,
-      next: `/pages?page=${firstPage}`
+      next: `https://api.somesite.com/pages?page=${firstPage}`
     }
   }
 
-  const routes = jsonapi(great)
+  const routes = jsonapi(great, options)
   const route = findRoute(routes, {path: '/pages', method: 'GET'})
   const response = await route.handler(request)
 
