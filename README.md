@@ -161,6 +161,7 @@ The following routes will be created:
 - `secret` - JWT secret
 - `authSource` - Name of Integreat source to get ident token from
 - `jwtSub` - Ident prop to set to `sub` value from JWT on auth. Default is `id`
+- `baseUri` - The canonical uri to base uri generation on
 
 A not on `include` and `exclude`: If none of them are set, all possible routes
 will be generated from the datatypes. When both of them are set, `exclude` will
@@ -171,7 +172,8 @@ Example options:
 {
   tokenEndpoint: 'auth',
   include: ['entries', 'users'],
-  exclude: ['entries/id/author', 'users/id']
+  exclude: ['entries/id/author', 'users/id'],
+  baseUri: 'https://api.somesite.com'
 }
 ```
 
@@ -187,6 +189,9 @@ This means that the following routes will be generated from this example:
 - `/entries/{id}`
 - `/users`
 - `/auth`
+
+For a paginated response, the link to next page will be e.g.
+`https://api.somesite.com/entries?page=eyJ0e...`.
 
 ## Running the tests
 
