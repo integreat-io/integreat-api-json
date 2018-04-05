@@ -46,6 +46,14 @@ const send = async ({params, action, data, relationship}) => {
             next: {type: 'page', pageSize: 2, pageAfter: 'page4'}
           }
         }
+      } else if (params.pageAfter === 'page4') {
+        return {
+          status: 'ok',
+          data: setDateAttrs([]),
+          paging: {
+            next: null
+          }
+        }
       }
     } else if (params.authCode === '12345') {
       return {

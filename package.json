@@ -1,6 +1,6 @@
 {
   "name": "integreat-api-json",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Integreat json api",
   "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no> (http://kjellmorten.no)",
   "license": "ISC",
@@ -53,6 +53,6 @@
     "standard": "^11.0.1"
   },
   "dependencies": {
-    "jsonwebtoken": "^8.2.0"
+    "jsonwebtoken": "^8.2.1"
   }
 }

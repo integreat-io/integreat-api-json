@@ -22,8 +22,8 @@ const defs = {
 
 const great = integreat(defs, {adapters})
 
-const firstPage = 'eyJ0eXBlIjoicGFnZSIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJwYWdlMiJ9'
-const secondPage = 'eyJ0eXBlIjoicGFnZSIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJwYWdlNCJ9'
+const secondPage = 'eyJ0eXBlIjoicGFnZSIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJwYWdlMiJ9'
+const thirdPage = 'eyJ0eXBlIjoicGFnZSIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJwYWdlNCJ9'
 
 // Tests
 
@@ -55,7 +55,7 @@ test('should GET first page', async (t) => {
       first: null,
       last: null,
       prev: null,
-      next: `https://api.somesite.com/pages?page=${firstPage}`
+      next: `https://api.somesite.com/pages?page=${secondPage}`
     }
   }
 
@@ -72,8 +72,8 @@ test('should GET first page', async (t) => {
 test('should GET second page', async (t) => {
   const request = {
     method: 'GET',
-    path: `/pages?page=${firstPage}`,
-    params: {page: firstPage}
+    path: `/pages?page=${secondPage}`,
+    params: {page: secondPage}
   }
   const expected = {
     data: [
@@ -94,7 +94,33 @@ test('should GET second page', async (t) => {
       first: null,
       last: null,
       prev: null,
-      next: `/pages?page=${secondPage}`
+      next: `/pages?page=${thirdPage}`
+    }
+  }
+
+  const routes = jsonapi(great)
+  const route = findRoute(routes, {path: '/pages', method: 'GET'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 200, response.statusMessage)
+  t.truthy(response.body)
+  t.deepEqual(response.body, expected)
+})
+
+test('should GET empty result after last page', async (t) => {
+  const request = {
+    method: 'GET',
+    path: `/pages?page=${thirdPage}`,
+    params: {page: thirdPage}
+  }
+  const expected = {
+    data: [],
+    links: {
+      first: null,
+      last: null,
+      prev: null,
+      next: null
     }
   }
 
