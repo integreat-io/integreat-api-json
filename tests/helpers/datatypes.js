@@ -18,6 +18,7 @@ module.exports = [
       name: {type: 'string'},
       tokens: 'string[]'
     },
+    relationships: {},
     access: 'auth'
   },
   {
@@ -25,13 +26,17 @@ module.exports = [
     source: 'comments',
     attributes: {
       text: 'string'
-    }
+    },
+    relationships: {}
   },
   {
     id: 'page',
     source: 'pages',
     attributes: {
       title: 'string'
+    },
+    relationships: {
+      comments: {type: 'comment', query: {article: 'id'}}
     }
   },
   {
@@ -40,6 +45,7 @@ module.exports = [
     internal: true,
     attributes: {
       lastUpdatedAt: 'date'
-    }
+    },
+    relationships: {}
   }
 ]

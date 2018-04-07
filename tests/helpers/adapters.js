@@ -1,4 +1,4 @@
-const {ent1, ent2, johnf, page1, page2, page3, page4} = require('./data')
+const {ent1, ent2, johnf, page1, page2, page3, page4, comment3, comment4} = require('./data')
 
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
@@ -52,6 +52,16 @@ const send = async ({params, action, data, relationship}) => {
           data: setDateAttrs([]),
           paging: {
             next: null
+          }
+        }
+      }
+    } else if (params.type === 'comment') {
+      if (params.pageAfter === 'comment2') {
+        return {
+          status: 'ok',
+          data: setDateAttrs([comment3, comment4]),
+          paging: {
+            next: {type: 'comment', pageSize: 2, pageAfter: 'comment4'}
           }
         }
       }

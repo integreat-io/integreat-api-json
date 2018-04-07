@@ -75,5 +75,23 @@ module.exports = {
       title: 'Page 4'
     },
     relationships: {}
+  },
+
+  comment3: {
+    id: 'comment3',
+    type: 'comment',
+    attributes: {
+      text: 'Comment 3'
+    },
+    relationships: {}
+  },
+
+  comment4: {
+    id: 'comment4',
+    type: 'comment',
+    attributes: {
+      text: 'Comment 4'
+    },
+    relationships: {}
   }
 }

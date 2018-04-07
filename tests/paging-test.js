@@ -13,10 +13,12 @@ const updatedAt = new Date('2018-01-23T17:01:59Z')
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'pages', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com/pages'}}]}
+    {id: 'pages', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com/pages'}}]},
+    {id: 'comments', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com/comments'}}]}
   ],
   mappings: [
-    {type: 'page', source: 'pages'}
+    {type: 'page', source: 'pages'},
+    {type: 'comment', source: 'comments'}
   ]
 }
 
@@ -24,6 +26,8 @@ const great = integreat(defs, {adapters})
 
 const secondPage = 'eyJ0eXBlIjoicGFnZSIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJwYWdlMiJ9'
 const thirdPage = 'eyJ0eXBlIjoicGFnZSIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJwYWdlNCJ9'
+const secondCommentPage = 'eyJ0eXBlIjoiY29tbWVudCIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJjb21tZW50MiJ9'
+const thirdCommentPage = 'eyJ0eXBlIjoiY29tbWVudCIsInBhZ2VTaXplIjoyLCJwYWdlQWZ0ZXIiOiJjb21tZW50NCJ9'
 
 // Tests
 
@@ -126,6 +130,45 @@ test('should GET empty result after last page', async (t) => {
 
   const routes = jsonapi(great)
   const route = findRoute(routes, {path: '/pages', method: 'GET'})
+  const response = await route.handler(request)
+
+  t.truthy(response)
+  t.is(response.statusCode, 200, response.statusMessage)
+  t.truthy(response.body)
+  t.deepEqual(response.body, expected)
+})
+
+test('should paginate on referenced endpoints', async (t) => {
+  const request = {
+    method: 'GET',
+    path: `/pages/page1/comments?page=${secondCommentPage}`,
+    params: {page: secondCommentPage}
+  }
+  const expected = {
+    data: [
+      {
+        id: 'comment3',
+        type: 'comment',
+        attributes: {text: 'Comment 3', createdAt, updatedAt},
+        relationships: {}
+      },
+      {
+        id: 'comment4',
+        type: 'comment',
+        attributes: {text: 'Comment 4', createdAt, updatedAt},
+        relationships: {}
+      }
+    ],
+    links: {
+      first: null,
+      last: null,
+      prev: null,
+      next: `/pages/page1/comments?page=${thirdCommentPage}`
+    }
+  }
+
+  const routes = jsonapi(great)
+  const route = findRoute(routes, {path: '/pages/{id}/comments', method: 'GET'})
   const response = await route.handler(request)
 
   t.truthy(response)
