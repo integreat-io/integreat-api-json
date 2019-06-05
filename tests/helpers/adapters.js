@@ -1,4 +1,4 @@
-const {ent1, ent2, johnf, page1, page2, page3, page4, comment3, comment4} = require('./data')
+const { ent1, ent2, johnf, page1, page2, page3, page4, comment3, comment4 } = require('./data')
 
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
@@ -7,10 +7,10 @@ const identityFn = (arg) => arg
 
 const setDateAttrs = (data) => data.map((item) => ({
   ...item,
-  attributes: {...item.attributes, createdAt, updatedAt}
+  attributes: { ...item.attributes, createdAt, updatedAt }
 }))
 
-const send = async ({params, action, data, relationship}) => {
+const send = async ({ params, action, data, relationship }) => {
   if (action === 'GET') {
     if (params.type === 'entry') {
       if (params.id === 'ent1') {
@@ -35,7 +35,7 @@ const send = async ({params, action, data, relationship}) => {
           status: 'ok',
           data: setDateAttrs([page1, page2]),
           paging: {
-            next: {type: 'page', pageSize: 2, pageAfter: 'page2'}
+            next: { type: 'page', pageSize: 2, pageAfter: 'page2' }
           }
         }
       } else if (params.pageAfter === 'page2') {
@@ -43,7 +43,7 @@ const send = async ({params, action, data, relationship}) => {
           status: 'ok',
           data: setDateAttrs([page3, page4]),
           paging: {
-            next: {type: 'page', pageSize: 2, pageAfter: 'page4'}
+            next: { type: 'page', pageSize: 2, pageAfter: 'page4' }
           }
         }
       } else if (params.pageAfter === 'page4') {
@@ -61,14 +61,14 @@ const send = async ({params, action, data, relationship}) => {
           status: 'ok',
           data: setDateAttrs([comment3, comment4]),
           paging: {
-            next: {type: 'comment', pageSize: 2, pageAfter: 'comment4'}
+            next: { type: 'comment', pageSize: 2, pageAfter: 'comment4' }
           }
         }
       }
     } else if (params.authCode === '12345') {
       return {
         status: 'ok',
-        data: [{body: {id: 'twitter|23456'}}]
+        data: [{ body: { id: 'twitter|23456' } }]
       }
     }
   }
@@ -80,7 +80,7 @@ const send = async ({params, action, data, relationship}) => {
           status: 'ok',
           data: setDateAttrs([{
             ...ent1,
-            relationships: {...ent1.relationships, comments: [{id: 'comment1', type: 'comment'}]}
+            relationships: { ...ent1.relationships, comments: [{ id: 'comment1', type: 'comment' }] }
           }])
         }
       } else if (data.id === 'ent2') {
@@ -89,8 +89,8 @@ const send = async ({params, action, data, relationship}) => {
           data: [{
             id: 'ent2',
             type: 'entry',
-            attributes: {title: 'Entry 2', createdAt, updatedAt},
-            relationships: {author: {id: 'johnf', type: 'user'}}
+            attributes: { title: 'Entry 2', createdAt, updatedAt },
+            relationships: { author: { id: 'johnf', type: 'user' } }
           }]
         }
       }
@@ -99,11 +99,11 @@ const send = async ({params, action, data, relationship}) => {
 
   if (action === 'DELETE') {
     if (params.id === 'ent1') {
-      return {status: 'ok'}
+      return { status: 'ok' }
     }
   }
 
-  return {status: 'notfound', error: 'Not found'}
+  return { status: 'notfound', error: 'Not found' }
 }
 
 const adapters = {

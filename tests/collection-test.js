@@ -14,36 +14,36 @@ const updatedAt = new Date('2018-01-23T17:01:59Z')
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'entries', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com'}}]}
+    { id: 'entries', adapter: 'mock', endpoints: [{ options: { uri: 'http://example.api.com' } }] }
   ],
   mappings: [
-    {type: 'entry', source: 'entries'}
+    { type: 'entry', source: 'entries' }
   ]
 }
 
-const great = integreat(defs, {adapters})
+const great = integreat(defs, { adapters })
 
 // Tests
 
 test('should GET from resource collection endpoint', async (t) => {
-  const request = {method: 'GET', path: '/entries'}
-  const expected = {data: [
+  const request = { method: 'GET', path: '/entries' }
+  const expected = { data: [
     {
       id: 'ent1',
       type: 'entry',
-      attributes: {title: 'Entry 1', createdAt, updatedAt},
-      relationships: {author: {data: {id: 'johnf', type: 'user'}}}
+      attributes: { title: 'Entry 1', createdAt, updatedAt },
+      relationships: { author: { data: { id: 'johnf', type: 'user' } } }
     },
     {
       id: 'ent2',
       type: 'entry',
-      attributes: {title: 'Entry 2', createdAt, updatedAt},
-      relationships: {author: {data: {id: 'lucyk', type: 'user'}}}
+      attributes: { title: 'Entry 2', createdAt, updatedAt },
+      relationships: { author: { data: { id: 'lucyk', type: 'user' } } }
     }
-  ]}
+  ] }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries', method: 'GET'})
+  const route = findRoute(routes, { path: '/entries', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -54,18 +54,18 @@ test('should GET from resource collection endpoint', async (t) => {
 
 test('should POST to resource collection endpoint', async (t) => {
   const clock = sinon.useFakeTimers()
-  const body = {data: {
+  const body = { data: {
     id: 'ent2',
     type: 'entry',
     attributes: {
       title: 'Entry 2'
     },
     relationships: {
-      author: {data: {id: 'johnf', type: 'user'}}
+      author: { data: { id: 'johnf', type: 'user' } }
     }
-  }}
-  const request = {method: 'POST', path: '/entries', body}
-  const expected = {data: {
+  } }
+  const request = { method: 'POST', path: '/entries', body }
+  const expected = { data: {
     ...body.data,
     id: 'ent2',
     attributes: {
@@ -73,10 +73,10 @@ test('should POST to resource collection endpoint', async (t) => {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  }}
+  } }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries', method: 'POST'})
+  const route = findRoute(routes, { path: '/entries', method: 'POST' })
   const response = await route.handler(request)
 
   t.truthy(response)

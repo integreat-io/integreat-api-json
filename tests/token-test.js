@@ -11,12 +11,12 @@ import jsonapi from '..'
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'users', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com/users'}}]},
-    {id: 'twitter', adapter: 'mock', endpoints: [{options: {uri: 'https://api.twitter.com/1.0/auth'}}]}
+    { id: 'users', adapter: 'mock', endpoints: [{ options: { uri: 'http://example.api.com/users' } }] },
+    { id: 'twitter', adapter: 'mock', endpoints: [{ options: { uri: 'https://api.twitter.com/1.0/auth' } }] }
   ],
   mappings: [
-    {type: 'user', source: 'users'},
-    {type: 'user', source: 'twitter', attributes: {id: {path: 'body.id'}}}
+    { type: 'user', source: 'users' },
+    { type: 'user', source: 'twitter', attributes: { id: { path: 'body.id' } } }
   ],
   ident: {
     type: 'user'
@@ -30,7 +30,7 @@ const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
 const secret = 's3cr3t'
 const host = 'https://example.com'
 
-const great = integreat(defs, {adapters})
+const great = integreat(defs, { adapters })
 
 // Tests
 
@@ -60,7 +60,7 @@ test('should respond with access token', async (t) => {
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/token', method: 'POST'})
+  const route = findRoute(routes, { path: '/token', method: 'POST' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -78,7 +78,7 @@ test('should not have token endpoint when not specified in options', async (t) =
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/token', method: 'POST'})
+  const route = findRoute(routes, { path: '/token', method: 'POST' })
 
   t.falsy(route)
 })
@@ -89,7 +89,7 @@ test('should respond with invalid_grant when no ident type set', async (t) => {
     sources: defs.sources,
     mappings: defs.mappings
   }
-  const great = integreat(noidentDefs, {adapters})
+  const great = integreat(noidentDefs, { adapters })
   const options = {
     secret,
     host,
@@ -106,10 +106,10 @@ test('should respond with invalid_grant when no ident type set', async (t) => {
       client_id: 'app1'
     }
   }
-  const expected = {error: 'invalid_grant'}
+  const expected = { error: 'invalid_grant' }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/token', method: 'POST'})
+  const route = findRoute(routes, { path: '/token', method: 'POST' })
   const response = await route.handler(request)
 
   t.truthy(response)

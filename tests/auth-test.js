@@ -10,10 +10,10 @@ import jsonapi from '..'
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'users', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com/users'}}]}
+    { id: 'users', adapter: 'mock', endpoints: [{ options: { uri: 'http://example.api.com/users' } }] }
   ],
   mappings: [
-    {type: 'user', source: 'users'}
+    { type: 'user', source: 'users' }
   ],
   ident: {
     type: 'user'
@@ -25,7 +25,7 @@ const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZiIsImlhd
 const createdAt = new Date('2018-01-03T12:22:11Z')
 const updatedAt = new Date('2018-01-23T17:01:59Z')
 
-const great = integreat(defs, {adapters})
+const great = integreat(defs, { adapters })
 
 // Tests
 
@@ -35,13 +35,13 @@ test('should GET relationship endpoint with ident johnf', async (t) => {
   }
   const request = {
     method: 'GET',
-    params: {id: 'johnf'},
+    params: { id: 'johnf' },
     path: '/users/johnf',
     headers: {
       Authorization: `Bearer ${validJwt}`
     }
   }
-  const expected = {data: {
+  const expected = { data: {
     id: 'johnf',
     type: 'user',
     attributes: {
@@ -51,10 +51,10 @@ test('should GET relationship endpoint with ident johnf', async (t) => {
       updatedAt
     },
     relationships: {}
-  }}
+  } }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/users/{id}', method: 'GET'})
+  const route = findRoute(routes, { path: '/users/{id}', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -69,12 +69,12 @@ test('should not GET relationship endpoint without ident', async (t) => {
   }
   const request = {
     method: 'GET',
-    params: {id: 'johnf'},
+    params: { id: 'johnf' },
     path: '/users/johnf'
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/users/{id}', method: 'GET'})
+  const route = findRoute(routes, { path: '/users/{id}', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)

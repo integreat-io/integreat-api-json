@@ -1,4 +1,4 @@
-function findRoute (routes, {path, method}) {
+function findRoute (routes, { path, method }) {
   return routes.find((route) => route.path === path && [].concat(route.method).includes(method))
 }
 

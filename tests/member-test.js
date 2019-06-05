@@ -14,20 +14,20 @@ const updatedAt = new Date('2018-01-23T17:01:59Z')
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'entries', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com'}}]}
+    { id: 'entries', adapter: 'mock', endpoints: [{ options: { uri: 'http://example.api.com' } }] }
   ],
   mappings: [
-    {type: 'entry', source: 'entries'}
+    { type: 'entry', source: 'entries' }
   ]
 }
 
-const great = integreat(defs, {adapters})
+const great = integreat(defs, { adapters })
 
 // Tests
 
 test('should GET from resource member endpoint', async (t) => {
-  const request = {method: 'GET', params: {id: 'ent1'}, path: '/entries/ent1'}
-  const expected = {data: {
+  const request = { method: 'GET', params: { id: 'ent1' }, path: '/entries/ent1' }
+  const expected = { data: {
     id: 'ent1',
     type: 'entry',
     attributes: {
@@ -35,11 +35,11 @@ test('should GET from resource member endpoint', async (t) => {
       createdAt,
       updatedAt
     },
-    relationships: {author: {data: {id: 'johnf', type: 'user'}}}
-  }}
+    relationships: { author: { data: { id: 'johnf', type: 'user' } } }
+  } }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'GET'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -48,10 +48,10 @@ test('should GET from resource member endpoint', async (t) => {
 })
 
 test('should respond with 404 when GETting unknown resource member', async (t) => {
-  const request = {method: 'GET', params: {id: 'ent0'}, path: '/entries/ent0'}
+  const request = { method: 'GET', params: { id: 'ent0' }, path: '/entries/ent0' }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'GET'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -62,16 +62,16 @@ test('should respond with 404 when GETting unknown resource member', async (t) =
 test.serial('should PATCH resource member endpoint', async (t) => {
   const request = {
     method: 'PATCH',
-    params: {id: 'ent1'},
+    params: { id: 'ent1' },
     body: {
       data: {
         id: 'ent1',
         type: 'entry',
-        attributes: {title: 'Entry 1'},
-        relationships: {comments: {data: [{id: 'comment1', type: 'comment'}]}}
+        attributes: { title: 'Entry 1' },
+        relationships: { comments: { data: [{ id: 'comment1', type: 'comment' }] } }
       }
     },
-    path: '/entries/ent1'}
+    path: '/entries/ent1' }
   const expectedAction = {
     type: 'SET',
     payload: {
@@ -80,17 +80,17 @@ test.serial('should PATCH resource member endpoint', async (t) => {
       data: {
         id: 'ent1',
         type: 'entry',
-        attributes: {title: 'Entry 1'},
-        relationships: {comments: [{id: 'comment1', type: 'comment'}]}
+        attributes: { title: 'Entry 1' },
+        relationships: { comments: [{ id: 'comment1', type: 'comment' }] }
       },
       useDefaults: false
     },
-    meta: {queue: true, ident: null}
+    meta: { queue: true, ident: null }
   }
   sinon.spy(great, 'dispatch')
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'PATCH'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'PATCH' })
   const response = await route.handler(request)
 
   t.is(great.dispatch.callCount, 1)
@@ -105,14 +105,14 @@ test.serial('should PATCH resource member endpoint', async (t) => {
 test.serial('should respond with 202 when action is sent to a queue', async (t) => {
   const request = {
     method: 'PATCH',
-    params: {id: 'ent1'},
+    params: { id: 'ent1' },
     path: '/entries/ent1',
-    body: {data: {id: 'ent1', type: 'entry', attributes: {title: 'Entry 1'}}}
+    body: { data: { id: 'ent1', type: 'entry', attributes: { title: 'Entry 1' } } }
   }
-  sinon.stub(great, 'dispatch').resolves({status: 'queued'})
+  sinon.stub(great, 'dispatch').resolves({ status: 'queued' })
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'PATCH'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'PATCH' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -125,13 +125,13 @@ test.serial('should respond with 202 when action is sent to a queue', async (t) 
 test('should respond with 404 when PATCHing unknown resource member', async (t) => {
   const request = {
     method: 'PATCH',
-    params: {id: 'ent0'},
+    params: { id: 'ent0' },
     path: '/entries/ent0',
-    body: {data: {id: 'ent0', type: 'entry', attributes: {title: 'Unknown'}}}
+    body: { data: { id: 'ent0', type: 'entry', attributes: { title: 'Unknown' } } }
   }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'PATCH'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'PATCH' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -142,9 +142,9 @@ test('should respond with 404 when PATCHing unknown resource member', async (t) 
 test.serial('should DELETE resource member endpoint', async (t) => {
   const request = {
     method: 'DELETE',
-    params: {id: 'ent1'},
+    params: { id: 'ent1' },
     body: null,
-    path: '/entries/ent1'}
+    path: '/entries/ent1' }
   const expectedAction = {
     type: 'DELETE',
     payload: {
@@ -152,12 +152,12 @@ test.serial('should DELETE resource member endpoint', async (t) => {
       id: 'ent1',
       useDefaults: false
     },
-    meta: {queue: true, ident: null}
+    meta: { queue: true, ident: null }
   }
   sinon.spy(great, 'dispatch')
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'DELETE'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'DELETE' })
   const response = await route.handler(request)
 
   t.is(great.dispatch.callCount, 1)
@@ -172,12 +172,12 @@ test.serial('should DELETE resource member endpoint', async (t) => {
 test('should respond with 404 when DELETEing unknown resource member', async (t) => {
   const request = {
     method: 'DELETE',
-    params: {id: 'ent0'},
+    params: { id: 'ent0' },
     path: '/entries/ent0'
   }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}', method: 'DELETE'})
+  const route = findRoute(routes, { path: '/entries/{id}', method: 'DELETE' })
   const response = await route.handler(request)
 
   t.truthy(response)

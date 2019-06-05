@@ -6,7 +6,7 @@ module.exports = {
       title: 'Entry 1'
     },
     relationships: {
-      author: {id: 'johnf', type: 'user'}
+      author: { id: 'johnf', type: 'user' }
     }
   },
 
@@ -17,7 +17,7 @@ module.exports = {
       title: 'Entry 2'
     },
     relationships: {
-      author: {id: 'lucyk', type: 'user'}
+      author: { id: 'lucyk', type: 'user' }
     }
   },
 

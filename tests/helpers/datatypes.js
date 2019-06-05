@@ -4,18 +4,18 @@ module.exports = [
     plural: 'entries',
     source: 'entries',
     attributes: {
-      title: {type: 'string'}
+      title: { type: 'string' }
     },
     relationships: {
-      author: {type: 'user'},
-      comments: {type: 'comment', query: {article: 'id'}}
+      author: { type: 'user' },
+      comments: { type: 'comment', query: { article: 'id' } }
     }
   },
   {
     id: 'user',
     source: 'users',
     attributes: {
-      name: {type: 'string'},
+      name: { type: 'string' },
       tokens: 'string[]'
     },
     relationships: {},
@@ -36,7 +36,7 @@ module.exports = [
       title: 'string'
     },
     relationships: {
-      comments: {type: 'comment', query: {article: 'id'}}
+      comments: { type: 'comment', query: { article: 'id' } }
     }
   },
   {

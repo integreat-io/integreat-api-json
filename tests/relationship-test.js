@@ -10,23 +10,23 @@ import jsonapi from '..'
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'entries', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com'}}]}
+    { id: 'entries', adapter: 'mock', endpoints: [{ options: { uri: 'http://example.api.com' } }] }
   ],
   mappings: [
-    {type: 'entry', source: 'entries'}
+    { type: 'entry', source: 'entries' }
   ]
 }
 
-const great = integreat(defs, {adapters})
+const great = integreat(defs, { adapters })
 
 // Tests
 
 test('should GET relationship endpoint', async (t) => {
-  const request = {method: 'GET', params: {id: 'ent1'}, path: '/entries/ent1/relationships/author'}
-  const expected = {data: {type: 'user', id: 'johnf'}}
+  const request = { method: 'GET', params: { id: 'ent1' }, path: '/entries/ent1/relationships/author' }
+  const expected = { data: { type: 'user', id: 'johnf' } }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}/relationships/author', method: 'GET'})
+  const route = findRoute(routes, { path: '/entries/{id}/relationships/author', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -36,10 +36,10 @@ test('should GET relationship endpoint', async (t) => {
 })
 
 test('should responde with 404 when GETting unknown relationship endpoint', async (t) => {
-  const request = {method: 'GET', params: {id: 'ent0'}, path: '/entries/ent0/relationships/author'}
+  const request = { method: 'GET', params: { id: 'ent0' }, path: '/entries/ent0/relationships/author' }
 
   const routes = jsonapi(great)
-  const route = findRoute(routes, {path: '/entries/{id}/relationships/author', method: 'GET'})
+  const route = findRoute(routes, { path: '/entries/{id}/relationships/author', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)

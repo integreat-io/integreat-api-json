@@ -2,7 +2,7 @@ import test from 'ava'
 import integreat from 'integreat'
 import findRoute from './helpers/findRoute'
 import adapters from './helpers/adapters'
-import {johnf} from './helpers/data'
+import { johnf } from './helpers/data'
 
 import jsonapi from '..'
 
@@ -14,10 +14,10 @@ const updatedAt = new Date('2018-01-23T17:01:59Z')
 const defs = {
   datatypes: require('./helpers/datatypes'),
   sources: [
-    {id: 'users', adapter: 'mock', endpoints: [{options: {uri: 'http://example.api.com/users'}}]}
+    { id: 'users', adapter: 'mock', endpoints: [{ options: { uri: 'http://example.api.com/users' } }] }
   ],
   mappings: [
-    {type: 'user', source: 'users'}
+    { type: 'user', source: 'users' }
   ],
   ident: {
     type: 'user'
@@ -39,7 +39,7 @@ const tokenJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
 const secret = 's3cr3t'
 const host = 'https://example.com'
 
-const great = integreat(defs, {adapters})
+const great = integreat(defs, { adapters })
 
 // Tests
 
@@ -57,13 +57,13 @@ test('should respond with item corresponding to ident', async (t) => {
       Authorization: `Bearer ${validJwt}`
     }
   }
-  const expectedBody = {data: {
+  const expectedBody = { data: {
     ...johnf,
-    attributes: {...johnf.attributes, createdAt, updatedAt}}
+    attributes: { ...johnf.attributes, createdAt, updatedAt } }
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const route = findRoute(routes, { path: '/ident', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -86,13 +86,13 @@ test('should treat jwt sub as token when specified', async (t) => {
       Authorization: `Bearer ${tokenJwt}`
     }
   }
-  const expectedBody = {data: {
+  const expectedBody = { data: {
     ...johnf,
-    attributes: {...johnf.attributes, createdAt, updatedAt}}
+    attributes: { ...johnf.attributes, createdAt, updatedAt } }
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const route = findRoute(routes, { path: '/ident', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -116,7 +116,7 @@ test('should respond with 401 when no authenticated ident', async (t) => {
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const route = findRoute(routes, { path: '/ident', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -139,7 +139,7 @@ test('should respond with 404 when item for ident is not found', async (t) => {
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const route = findRoute(routes, { path: '/ident', method: 'GET' })
   const response = await route.handler(request)
 
   t.truthy(response)
@@ -153,7 +153,7 @@ test('should not create endpoint unless specified', async (t) => {
   }
 
   const routes = jsonapi(great, options)
-  const route = findRoute(routes, {path: '/ident', method: 'GET'})
+  const route = findRoute(routes, { path: '/ident', method: 'GET' })
 
   t.falsy(route)
 })

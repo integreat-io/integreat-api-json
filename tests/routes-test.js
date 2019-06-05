@@ -7,31 +7,31 @@ import jsonapi from '..'
 
 // Helpers
 
-const {datatypes} = integreat({datatypes: require('./helpers/datatypes'), sources: []}, {adapters: {}})
+const { datatypes } = integreat({ datatypes: require('./helpers/datatypes'), sources: [] }, { adapters: {} })
 
 // Tests
 
 test('should return route objects from Integreat instance', (t) => {
-  const great = {datatypes}
+  const great = { datatypes }
 
   const routes = jsonapi(great)
 
   t.true(Array.isArray(routes))
-  t.truthy(findRoute(routes, {path: '/entries', method: 'GET'}))
-  t.truthy(findRoute(routes, {path: '/users', method: 'GET'}))
+  t.truthy(findRoute(routes, { path: '/entries', method: 'GET' }))
+  t.truthy(findRoute(routes, { path: '/users', method: 'GET' }))
 })
 
 test('should dispatch action on request', async (t) => {
-  const dispatch = sinon.stub().resolves({status: 'ok', data: [{id: 'ent1', type: 'entry'}]})
-  const great = {datatypes, dispatch}
-  const request = {method: 'GET', path: '/entries'}
+  const dispatch = sinon.stub().resolves({ status: 'ok', data: [{ id: 'ent1', type: 'entry' }] })
+  const great = { datatypes, dispatch }
+  const request = { method: 'GET', path: '/entries' }
   const expected = {
     type: 'GET',
     payload: {
       type: 'entry',
       useDefaults: true
     },
-    meta: {ident: null}
+    meta: { ident: null }
   }
 
   const routes = jsonapi(great)
@@ -46,39 +46,39 @@ test('should dispatch action on request', async (t) => {
 })
 
 test('should return only routes specified by include option', (t) => {
-  const great = {datatypes}
+  const great = { datatypes }
   const options = {
     include: ['entries']
   }
 
   const routes = jsonapi(great, options)
 
-  t.truthy(findRoute(routes, {path: '/entries', method: 'GET'}))
-  t.falsy(findRoute(routes, {path: '/users', method: 'GET'}))
+  t.truthy(findRoute(routes, { path: '/entries', method: 'GET' }))
+  t.falsy(findRoute(routes, { path: '/users', method: 'GET' }))
 })
 
 test('should exclude routes specified by exclude option', (t) => {
-  const great = {datatypes}
+  const great = { datatypes }
   const options = {
     exclude: ['entries']
   }
 
   const routes = jsonapi(great, options)
 
-  t.falsy(findRoute(routes, {path: '/entries', method: 'GET'}))
-  t.truthy(findRoute(routes, {path: '/users', method: 'GET'}))
+  t.falsy(findRoute(routes, { path: '/entries', method: 'GET' }))
+  t.truthy(findRoute(routes, { path: '/users', method: 'GET' }))
 })
 
 test('should prefix routes', (t) => {
-  const great = {datatypes}
+  const great = { datatypes }
   const options = {
     prefix: '/1.0'
   }
 
   const routes = jsonapi(great, options)
 
-  t.falsy(findRoute(routes, {path: '/entries', method: 'GET'}))
-  t.truthy(findRoute(routes, {path: '/1.0/entries', method: 'GET'}))
-  t.truthy(findRoute(routes, {path: '/1.0/entries/{id}', method: 'GET'}))
-  t.truthy(findRoute(routes, {path: '/1.0/entries/{id}/author', method: 'GET'}))
+  t.falsy(findRoute(routes, { path: '/entries', method: 'GET' }))
+  t.truthy(findRoute(routes, { path: '/1.0/entries', method: 'GET' }))
+  t.truthy(findRoute(routes, { path: '/1.0/entries/{id}', method: 'GET' }))
+  t.truthy(findRoute(routes, { path: '/1.0/entries/{id}/author', method: 'GET' }))
 })
