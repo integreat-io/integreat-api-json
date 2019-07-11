@@ -50,7 +50,7 @@
     "ava": "^2.0.0",
     "babel-preset-env": "^1.7.0",
     "coveralls": "^3.0.3",
-    "integreat": "^0.6.4",
+    "integreat": "^0.7.2",
     "nyc": "^14.1.1",
     "sinon": "^7.3.2",
     "standard": "^12.0.1"
